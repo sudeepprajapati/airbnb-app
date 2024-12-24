@@ -1,29 +1,19 @@
-import express from "express"
+import express from "express";
+import connectDB from "./db/index.js";
 import dotenv from 'dotenv';
+import { app } from './app.js'; 
+
 dotenv.config();
-import cors from "cors"
 
+const port = process.env.PORT || 3000; 
 
-const app = express();
-const port = process.env.PORT
-
-app.use(express.json())
-app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
-}))
-
-app.get('/test', (req, res) => {
-    res.json('test ok');
-});
-
-app.post('/register', (req, res) => {
-    const { name, email, password } = req.body;
-    res.json({name, email, password})
-})
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-});
-
-
+// Connect to MongoDB
+connectDB()
+    .then(() => {
+        app.listen(port, () => {
+            console.log(`⚙️ Server is running at port : ${port}`);
+        });
+    })
+    .catch((err) => {
+        console.log("MONGO db connection failed !!! ", err);
+    });
