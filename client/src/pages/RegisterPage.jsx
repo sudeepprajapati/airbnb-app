@@ -1,19 +1,31 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from 'axios'
 
 function RegisterPage() {
     const [name, setName] = useState('')
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    function registerUser(e) {
+    const navigate = useNavigate()  
+
+    async function registerUser(e) {
         e.preventDefault()
-        axios.post('/register', {
-            name,
-            email,
-            password,
-        })
+        try {
+            // Sending registration request to the backend
+            await axios.post('/register', {
+                name,
+                username,
+                email,
+                password,
+            })
+            navigate('/') // Redirects to home page (or any other page like "/dashboard")
+        } catch (error) {
+            console.error("Registration error:", error)
+            alert('Registration failed, please try again')
+        }
     }
+
     return (
         <div className='mt-4 grow flex items-center justify-around'>
             <div className='mb-32'>
@@ -24,6 +36,11 @@ function RegisterPage() {
                         placeholder='John Doe'
                         value={name}
                         onChange={e => setName(e.target.value)} />
+                    <input
+                        type="text"
+                        placeholder='@john'
+                        value={username}
+                        onChange={e => setUsername(e.target.value)} />
                     <input
                         type="email"
                         placeholder='your@email.com'
