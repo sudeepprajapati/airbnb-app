@@ -8,7 +8,7 @@ import axios from 'axios';
 import { UserContextProvider } from './context/UserContext';
 import AccountPage from './pages/AccountPage';
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'http://localhost:3000/api/v1/users/';
 axios.defaults.withCredentials = true
 
 function App() {

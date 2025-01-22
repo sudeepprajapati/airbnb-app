@@ -14,7 +14,7 @@ function LoginPage() {
   async function handleLogin(e) {
     e.preventDefault();
     try {
-      const {data} = await axios.post('http://localhost:3000/login', { loginvalue, password });
+      const { data } = await axios.post('http://localhost:3000/api/v1/users/login', { loginvalue, password });
 
       setUser(data.user)
 
