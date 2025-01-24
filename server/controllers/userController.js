@@ -14,6 +14,10 @@ const test = ((req, res) => {
 const registerUser = (async (req, res) => {
     const { name, username, email, password } = req.body;
 
+    if ([name, username, email, password].some((field) => !field || field.trim() === "")) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
     try {
         const hashedPassword = await bcryptjs.hash(password, 10);
 
@@ -80,6 +84,10 @@ const loginUser = (async (req, res) => {
     }
 })
 
+const logoutUser = (async (req, res) => {
+    res.clearCookie('token').json({ message: 'Logged out' });
+})
+
 const userProfile = (async (req, res) => {
     const { token } = req.cookies;
     if (token) {
@@ -97,5 +105,6 @@ export {
     test,
     registerUser,
     loginUser,
+    logoutUser,
     userProfile
 }
