@@ -20,6 +20,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/account/:subpage?" element={<AccountPage />} /> //Dynamic routing
+          <Route path="/account/:subpage/:action" element={<AccountPage />} /> //Dynamic routing
         </Route>
       </Routes>
     </UserContextProvider>
