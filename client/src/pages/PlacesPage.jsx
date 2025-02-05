@@ -38,6 +38,9 @@ export default function PlacesPage() {
     const [maxGuests, setMaxGuests] = useState(1)
     const [addedPhotos, setAddedPhotos] = useState([])
 
+    function addNewPlace(e) {
+        e.preventDefault()
+    }
 
     return (
         <>
@@ -52,7 +55,7 @@ export default function PlacesPage() {
                 )}
                 {action === 'new' && (
                     <div>
-                        <form className="text-left flex flex-col gap-4">
+                        <form onSubmit={addNewPlace} className="text-left flex flex-col gap-4">
                             <label >
                                 {preInput('Name your place', 'Short titles work best. Have fun with it-you can always change it later.')}
                                 {/* <h2 className="text-2xl font-bold">

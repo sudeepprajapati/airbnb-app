@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import axios from 'axios';
 import { UserContextProvider } from './context/UserContext';
 import AccountPage from './pages/AccountPage';
+import AuthMiddleware from './middleware';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v1/users/';
 axios.defaults.withCredentials = true
@@ -19,8 +20,18 @@ function App() {
           <Route index element={<IndexPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/account/:subpage?" element={<AccountPage />} /> //Dynamic routing
-          <Route path="/account/:subpage/:action" element={<AccountPage />} /> //Dynamic routing
+          {/* <Route path="/account/:subpage?" element={<AccountPage />} /> //Dynamic routing
+          <Route path="/account/:subpage/:action" element={<AccountPage />} /> //Dynamic routing */}
+          <Route path="/account/:subpage?" element={
+            <AuthMiddleware>
+              <AccountPage />
+            </AuthMiddleware>
+          } />
+          <Route path="/account/:subpage/:action" element={
+            <AuthMiddleware>
+              <AccountPage />
+            </AuthMiddleware>
+          } />
         </Route>
       </Routes>
     </UserContextProvider>
