@@ -22,6 +22,7 @@ function App() {
           <Route index element={<IndexPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          {/* <Route path="/test" element={<h2>test</h2>} /> */}
           <Route path="/account/" element={
             <AuthMiddleware>
               <ProfilePage />

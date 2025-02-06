@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from './context/UserContext';
 
 const AuthMiddleware = ({ children }) => {
-    const { user } = useContext(UserContext);
+    const { user, loading } = useContext(UserContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user) {
+        if (!loading && !user) {
             navigate('/login');
         }
-    }, [user, navigate]);
+    }, [user,loading, navigate]);
 
     return user ? children : null;
 };
