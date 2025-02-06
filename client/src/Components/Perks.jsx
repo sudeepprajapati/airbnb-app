@@ -1,4 +1,4 @@
-import { preInput } from '../pages/PlacesPage';
+import { preInput } from '../Components/PlacesForm';
 
 export default function Perks({ selected, onChange }) {
     function handleCbClick(e) {

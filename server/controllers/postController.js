@@ -2,6 +2,9 @@ import imageDownloader from 'image-downloader';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
+import { Place } from '../models/place.model.js';
+import { jwtSecret } from './userController.js';
+import jwt from "jsonwebtoken"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -85,4 +88,22 @@ const uploadPhoto = async (req, res) => {
     res.json(uploadedFiles); // Respond with the list of uploaded files
 };
 
-export { addPhotoByLink, uploadPhoto };
+const places = async (req, res) => {
+    const { token } = req.cookies;
+    const {
+        title, address, addedPhotos, descripiton,
+        perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const placeDoc = await Place.create({
+            owner: userData.id,
+            title, address, addedPhotos, descripiton,
+            perks, extraInfo, checkIn, checkOut, maxGuests
+
+        })
+        res.json({ message: 'Place added', placeDoc });
+    })
+}
+
+export { addPhotoByLink, uploadPhoto, places };

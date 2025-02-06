@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { preInput } from '../pages/PlacesPage';
+import { preInput } from '../Components/PlacesForm';
 import axios from 'axios';
 
 export default function PhotosUploader({ addedPhotos, onChange }) {

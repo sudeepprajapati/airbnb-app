@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const jwtSecret = process.env.JWT_SECRET
+export const jwtSecret = process.env.JWT_SECRET
 
 const test = ((req, res) => {
     res.json('test ok');
