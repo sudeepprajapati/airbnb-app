@@ -22,7 +22,6 @@ function App() {
           <Route index element={<IndexPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          {/* <Route path="/test" element={<h2>test</h2>} /> */}
           <Route path="/account/" element={
             <AuthMiddleware>
               <ProfilePage />
@@ -34,6 +33,11 @@ function App() {
             </AuthMiddleware>
           } />
           <Route path="/account/places/new" element={
+            <AuthMiddleware>
+              <PlacesForm />
+            </AuthMiddleware>
+          } />
+          <Route path="/account/places/:id" element={
             <AuthMiddleware>
               <PlacesForm />
             </AuthMiddleware>

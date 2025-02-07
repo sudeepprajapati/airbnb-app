@@ -88,22 +88,59 @@ const uploadPhoto = async (req, res) => {
     res.json(uploadedFiles); // Respond with the list of uploaded files
 };
 
-const places = async (req, res) => {
+const addPlaces = async (req, res) => {
     const { token } = req.cookies;
     const {
-        title, address, addedPhotos, descripiton,
+        title, address, addedPhotos, description,
         perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
         const placeDoc = await Place.create({
             owner: userData.id,
-            title, address, addedPhotos, descripiton,
+            title, address, photos: addedPhotos, description,
             perks, extraInfo, checkIn, checkOut, maxGuests
-
         })
         res.json({ message: 'Place added', placeDoc });
     })
 }
 
-export { addPhotoByLink, uploadPhoto, places };
+const getPlaces = async (req, res) => {
+    const { token } = req.cookies;
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const places = await Place.find({ owner: userData.id });
+        res.json(places);
+    })
+}
+
+const getPlacesId = async (req, res) => {
+    const { id } = req.params;
+    const place = await Place.findById(id);
+    res.json(place);
+}
+
+const updatePlaces = async (req, res) => {
+    const { id } = req.params;
+    const { token } = req.cookies;
+    const { title, address, addedPhotos, description,
+        perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const placeDoc = await Place.findById(id)
+        if (userData.id === placeDoc.owner.toString()) {
+            placeDoc.set({
+                title, address, photos: addedPhotos, description,
+                perks, extraInfo, checkIn, checkOut, maxGuests
+            })
+            await placeDoc.save()
+            res.json({ message: 'Place updated', placeDoc });
+        }
+    })
+}
+
+
+
+export { addPhotoByLink, uploadPhoto, addPlaces, getPlaces, getPlacesId, updatePlaces };

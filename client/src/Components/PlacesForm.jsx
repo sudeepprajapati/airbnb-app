@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Perks from "../Components/Perks";
 import PhotosUploader from "../Components/PhotosUploader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AccountNavigation from "./AccountNavigation";
 import axios from "axios";
 
@@ -17,7 +17,7 @@ function inputDescription(text) {
         <p className="text-gray-500">{text}</p>
     )
 }
-export function preInput(header, description) {
+function preInput(header, description) {
     return (
         <>
             {inputHeader(header)}
@@ -26,8 +26,10 @@ export function preInput(header, description) {
     )
 }
 
-
 export default function PlacesForm() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
     const [description, setDescription] = useState('')
@@ -38,16 +40,35 @@ export default function PlacesForm() {
     const [maxGuests, setMaxGuests] = useState('')
     const [addedPhotos, setAddedPhotos] = useState([])
 
-    const navigate = useNavigate();
+    useEffect(() => {
+        if (!id) return;
+        axios.get(`/places/${id}`).then(({ data }) => {
+            const { title, address, description, perks, extraInfo, checkIn, checkOut, maxGuests, photos } = data;
+            setTitle(title || '');
+            setAddress(address || '');
+            setDescription(description || '');
+            setPerks(perks || []);
+            setExtraInfo(extraInfo || '');
+            setCheckIn(checkIn || '');
+            setCheckOut(checkOut || '');
+            setMaxGuests(maxGuests || '');
+            setAddedPhotos(photos || []);
+        });
+    }, [id]);
 
-    async function addNewPlace(e) {
+    async function savePlace(e) {
         e.preventDefault();
+        const placeData = {
+            title, address, addedPhotos,
+            description, perks, extraInfo,
+            checkIn, checkOut, maxGuests
+        };
         try {
-            const { data } = await axios.post('/places', {
-                title, address, description,
-                perks, extraInfo, checkIn,
-                checkOut, maxGuests, addedPhotos
-            });
+            if (id) {
+                await axios.put(`/places/${id}`, placeData);
+            } else {
+                await axios.post('/places', placeData);
+            }
             navigate('/account/places');
         } catch (error) {
             console.error('Error submitting the form:', error);
@@ -58,7 +79,7 @@ export default function PlacesForm() {
         <div>
             <AccountNavigation />
             <div className="text-center max-w-3xl mx-auto">
-                <form onSubmit={addNewPlace} className="text-left flex flex-col gap-4">
+                <form onSubmit={savePlace} className="text-left flex flex-col gap-4">
                     <label >
                         {preInput('Name your place', 'Short titles work best. Have fun with it-you can always change it later.')}
                         <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="My lovely apartement" name="" id="title" />
@@ -68,7 +89,7 @@ export default function PlacesForm() {
                         <input type="text" value={address} onChange={e => setAddress(e.target.value)} placeholder="address" />
                     </label>
                     <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-                    <label >
+                    <label>
                         {preInput('Describe your place', 'Help guests get a sense of your place by describing it in detail.')}
                         <textarea
                             rows={7}
@@ -115,3 +136,5 @@ export default function PlacesForm() {
         </div>
     )
 }
+
+export { preInput }
