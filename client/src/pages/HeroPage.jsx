@@ -1,6 +1,6 @@
 import React from 'react'
 
-function IndexPage() {
+function HeroPage() {
   return (
     <div>
       Index Page here
@@ -8,4 +8,4 @@ function IndexPage() {
   )
 }
 
-export default IndexPage
+export default HeroPage
