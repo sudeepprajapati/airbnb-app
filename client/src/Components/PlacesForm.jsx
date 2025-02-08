@@ -78,7 +78,7 @@ export default function PlacesForm() {
     return (
         <div>
             <AccountNavigation />
-            <div className="text-center max-w-3xl mx-auto">
+            <div className="text-center max-w-4xl mx-auto">
                 <form onSubmit={savePlace} className="text-left flex flex-col gap-4">
                     <label >
                         {preInput('Name your place', 'Short titles work best. Have fun with it-you can always change it later.')}
