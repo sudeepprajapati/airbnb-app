@@ -9,7 +9,7 @@ const photosMiddleware = multer({ dest: 'uploads' })
 // Route to add a photo by link as part of a post
 router.post('/add-by-link', addPhotoByLink);
 router.post('/upload', photosMiddleware.array('photos', 100), uploadPhoto);
-router.post('/places', addPlaces);
+router.post('/user-places', addPlaces);
 router.get('/places', getPlaces);
 router.get('/places/:id', getPlacesId);
 router.put('/places/:id', updatePlaces);
