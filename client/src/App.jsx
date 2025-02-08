@@ -1,15 +1,15 @@
 import './App.css'
 import { Routes, Route } from "react-router-dom";
-import IndexPage from './pages/IndexPage';
 import LoginPage from './pages/LoginPage';
 import Layout from './Layout';
 import RegisterPage from './pages/RegisterPage';
 import axios from 'axios';
 import { UserContextProvider } from './context/UserContext';
+import PlacesForm from './Components/PlacesForm';
 import ProfilePage from './pages/ProfilePage';
 import AuthMiddleware from './middleware';
 import PlacesPage from './pages/PlacesPage';
-import PlacesForm from './Components/PlacesForm';
+import HeroPage from './pages/HeroPage';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v1/users/';
 axios.defaults.withCredentials = true
@@ -19,7 +19,7 @@ function App() {
     <UserContextProvider>
       <Routes>
         <Route path="/" element={<Layout />} >
-          <Route index element={<IndexPage />} />
+          <Route index element={<HeroPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/account/" element={
