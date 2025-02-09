@@ -92,14 +92,14 @@ const addPlaces = async (req, res) => {
     const { token } = req.cookies;
     const {
         title, address, addedPhotos, description,
-        perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+        perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
         const placeDoc = await Place.create({
             owner: userData.id,
             title, address, photos: addedPhotos, description,
-            perks, extraInfo, checkIn, checkOut, maxGuests
+            perks, extraInfo, checkIn, checkOut, maxGuests, price
         })
         res.json({ message: 'Place added', placeDoc });
     })
@@ -125,7 +125,7 @@ const updatePlaces = async (req, res) => {
     const { id } = req.params;
     const { token } = req.cookies;
     const { title, address, addedPhotos, description,
-        perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+        perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
@@ -133,7 +133,7 @@ const updatePlaces = async (req, res) => {
         if (userData.id === placeDoc.owner.toString()) {
             placeDoc.set({
                 title, address, photos: addedPhotos, description,
-                perks, extraInfo, checkIn, checkOut, maxGuests
+                perks, extraInfo, checkIn, checkOut, maxGuests, price
             })
             await placeDoc.save()
             res.json({ message: 'Place updated', placeDoc });
@@ -141,6 +141,11 @@ const updatePlaces = async (req, res) => {
     })
 }
 
+const PlacesForAll = async (req, res) => {
+    const PlaceDoc = await Place.find()
+    res.json(PlaceDoc)
+}
 
 
-export { addPhotoByLink, uploadPhoto, addPlaces, getPlaces, getPlacesId, updatePlaces };
+
+export { addPhotoByLink, uploadPhoto, addPlaces, getPlaces, getPlacesId, updatePlaces, PlacesForAll };
