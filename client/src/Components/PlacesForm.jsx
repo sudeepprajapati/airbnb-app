@@ -39,30 +39,34 @@ export default function PlacesForm() {
     const [checkOut, setCheckOut] = useState('')
     const [maxGuests, setMaxGuests] = useState('')
     const [addedPhotos, setAddedPhotos] = useState([])
+    const [price, setPrice] = useState('1000')
 
     useEffect(() => {
         if (!id) return;
         axios.get(`/places/${id}`).then(({ data }) => {
-            const { title, address, description, perks, extraInfo, checkIn, checkOut, maxGuests, photos } = data;
+            const { title, address, description, perks, extraInfo, checkIn, checkOut, maxGuests, photos, price } = data;
             setTitle(title || '');
             setAddress(address || '');
             setDescription(description || '');
             setPerks(perks || []);
             setExtraInfo(extraInfo || '');
-            setCheckIn(checkIn || '');
-            setCheckOut(checkOut || '');
+            setCheckIn(checkIn.split('T')[0] || '');
+            setCheckOut(checkOut.split('T')[0] || '');
             setMaxGuests(maxGuests || '');
             setAddedPhotos(photos || []);
+            setPrice(price || '');
         });
     }, [id]);
 
     async function savePlace(e) {
         e.preventDefault();
+
         const placeData = {
             title, address, addedPhotos,
             description, perks, extraInfo,
-            checkIn, checkOut, maxGuests
+            checkIn, checkOut, maxGuests, price,
         };
+
         try {
             if (id) {
                 await axios.put(`/places/${id}`, placeData);
@@ -116,21 +120,30 @@ export default function PlacesForm() {
                         <div className="grid ml-10 gap-2 sm:grid-cols-3">
                             <div className="">
                                 <h3 className="mt-2 -mb-1">Check In</h3>
-                                <input type="text" value={checkIn} onChange={e => setCheckIn(e.target.value)} className="mt-1 block w-fit border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500 p-2" />
+                                <input type="date" value={checkIn} onChange={e => setCheckIn(e.target.value)} className="mt-1 block w-fit  rounded-md shadow-sm p-2" />
                             </div>
                             <div>
                                 <h3 className="mt-2 -mb-1">Check Out</h3>
-                                <input type="text" value={checkOut} onChange={e => setCheckOut(e.target.value)} className="mt-1 block w-fit border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500 p-2" />
+                                <input type="date" value={checkOut} onChange={e => setCheckOut(e.target.value)} className="mt-1 block w-fit rounded-md shadow-sm p-2" />
                             </div>
                             <div>
                                 <h3 className="mt-2 -mb-1">Max number of guests</h3>
                                 <input type="text" value={maxGuests}
                                     onChange={e => setMaxGuests(e.target.value)}
-                                    className="mt-1 block w-40 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500 p-2" />
+                                    className="mt-1 block w-40 rounded-md shadow-sm p-2" />
                             </div>
                         </div>
-                        <button type="submit" className="primary my-4">Save</button>
                     </label>
+                    <label >
+                        {preInput('Price per night', 'Price')}
+                        <div>
+                            <h3 className="mt-2 -mb-1"></h3>
+                            <input type="text" value={price}
+                                onChange={e => setPrice(e.target.value)}
+                                className="mt-1 rounded-md shadow-sm p-2 max-w-28" placeholder="1000" />
+                        </div>
+                    </label>
+                    <button type="submit" className="primary my-4">Save</button>
                 </form>
             </div>
         </div>
