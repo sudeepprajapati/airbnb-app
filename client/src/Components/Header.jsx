@@ -78,7 +78,7 @@ function Header() {
                     <div className="hidden sm:block border-l border-gray-300"></div>
                     <div className='hidden sm:block'>Add guests</div>
 
-                    <input type="text" placeholder="Search" className="block sm:hidden max-w-32 h-2 border-none outline-none" />
+                    <input type="text" placeholder="Search" className="block sm:hidden max-w-32 h-7 border-none focus:ring-transparent " />
 
                     <button className='bg-primary text-white p-1.5 rounded-full'>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
@@ -105,7 +105,7 @@ function Header() {
 
                     }
                     {!user && (
-                        <div className='text-gray-500'>Login</div>
+                        <div className='text-gray-500 hidden md:block'>Login</div>
                     )}
                 </Link>
             </header>

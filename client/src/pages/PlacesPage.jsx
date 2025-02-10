@@ -41,13 +41,13 @@ const PlacesPage = () => {
                                 </div>
                             </div>
                             <Link to={'/account/places/' + place._id} className='bg-primary p-1 w-20 text-center rounded-md text-white absolute right-0'>Edit</Link>
-                            <div className="flex-grow flex gap-20 00 ">
-                                <div className='flex flex-col gap-2 max-w-2xl'>
+                            <div className="flex-grow flex gap-4 md:gap-20 flex-col md:flex-row ">
+                                <div className='flex flex-col gap-2 max-w-2xl '>
                                     <h2 className="text-xl">{place.title}</h2>
                                     <p className="text-gray-500">Farm stay in {place.address}</p>
-                                    <p className="text-md mt-2">{place.description}</p>
+                                    <p className="text-md mt-2 ">{place.description}</p>
                                     <p className="text-md mt-2 gap-2">Perks: {place.perks}</p>
-                                    <p className="text-md mt-2">ExtraInfo:  {place.extraInfo}</p>
+                                    <p className="text-md mt-2 ">ExtraInfo:  {place.extraInfo}</p>
                                 </div>
                                 <div className='flex flex-col gap-2 bg-gray-200 p-4 rounded-2xl h-fit shadow-xl shadow-gray-300'>
                                     <h3 className='font-semibold '>₹{place.price} night</h3>

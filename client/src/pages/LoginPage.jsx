@@ -25,14 +25,14 @@ function LoginPage() {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setError(`Login failed with error: ${error.response?.data?.message || error.message}`);
+        setError(`Error: ${error.response?.data?.message || error.message}`);
       } else {
         setError('An unknown error occurred');
       }
     }
   }
   return (
-    <div className='mt-4 grow flex items-center justify-around'>
+    <div className='mt-28 grow flex  justify-around items-center'>
       <div className='mb-32'>
         <h1 className='text-4xl text-center mb-4'>Login</h1>
         <form className='max-w-md mx-auto' onSubmit={handleLogin}>

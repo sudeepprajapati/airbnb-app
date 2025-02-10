@@ -22,15 +22,15 @@ function HeroPage() {
   }
 
   return (
-    <div className='mt-7 grid gap-x-6 gap-y-8  grid-cols-2  md:grid-cols-3 lg:grid-cols-4'>
+    <div className='mt-7 grid gap-x-6 gap-y-8  md:grid-cols-3 lg:grid-cols-4 max-w-[365px] md:max-w-full ml-2'>
       {places.length > 0 ? (places.map(place => (
-        <div className="" >
-          <div className="bg-gray-500 mb-2 rounded-2xl flex">
+        <div className=" flex flex-col" >
+          <div className="bg-gray-500 mb-2 rounded-2xl flex  max-h-[345px] md:h-auto">
             {place.photos?.[0] && (
               <img
                 src={`http://localhost:3000/uploads/${place.photos?.[0]}`}
                 alt="No Image found"
-                className=' rounded-2xl object-cover aspect-square'
+                className='rounded-2xl object-cover aspect-square'
               />
             )}
           </div>
