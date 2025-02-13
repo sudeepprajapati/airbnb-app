@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-100 py-8 ">
+        <footer className="bg-gray-100 py-8">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                     {/* Navigation Links */}
                     <div>
                         <h4 className="font-bold mb-2">About Us</h4>
@@ -31,7 +31,7 @@ const Footer = () => {
                     {/* Social Media Links */}
                     <div>
                         <h4 className="font-bold mb-2">Follow Us</h4>
-                        <ul className="flex space-x-4">
+                        <ul className="flex flex-wrap space-x-4">
                             <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:underline">Facebook</a></li>
                             <li><a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="hover:underline">Twitter</a></li>
                             <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a></li>
