@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import AuthMiddleware from './middleware';
 import PlacesPage from './pages/PlacesPage';
 import HeroPage from './pages/HeroPage';
+import PlacePage from './pages/PlacePage';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v1/users/';
 axios.defaults.withCredentials = true
@@ -22,6 +23,7 @@ function App() {
           <Route index element={<HeroPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/places/:id" element={<PlacePage />} />
           <Route path="/account/" element={
             <AuthMiddleware>
               <ProfilePage />

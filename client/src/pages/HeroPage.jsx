@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { UserContext } from '../context/UserContext';
+import { Link } from 'react-router-dom'
 
 function HeroPage() {
   const { ready } = useContext(UserContext);
@@ -22,10 +23,10 @@ function HeroPage() {
   }
 
   return (
-    <div className='mt-7 grid gap-x-6 gap-y-8  md:grid-cols-3 lg:grid-cols-4 max-w-[365px] md:max-w-full ml-2'>
+    <div className='mt-7 grid gap-x-6 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[365px] sm:max-w-full ml-2'>
       {places.length > 0 ? (places.map(place => (
-        <div className=" flex flex-col" >
-          <div className="bg-gray-500 mb-2 rounded-2xl flex  max-h-[345px] md:h-auto">
+        <Link to={`/places/${place._id}`} className="flex flex-col" >
+          <div className="bg-gray-500 mb-2 rounded-2xl flex max-h-[345px] sm:h-auto">
             {place.photos?.[0] && (
               <img
                 src={`http://localhost:3000/uploads/${place.photos?.[0]}`}
@@ -39,7 +40,7 @@ function HeroPage() {
           <div className='mt-1 font-semibold '>
             <span className="font-bold"> ₹{place.price} night</span>
           </div>
-        </div>
+        </Link>
       ))
       ) : (
         <div>no places found</div>
