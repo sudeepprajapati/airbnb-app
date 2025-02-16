@@ -82,6 +82,21 @@ export default function BookingWidget() {
 
     const today = new Date().toISOString().split('T')[0];
 
+    async function bookThisPlace() {
+        try {
+            const response = await axios.post('/bookings', {
+                checkIn, checkOut, guests,
+                placeId: place._id, price: total,
+            });
+
+            const bookingId = response.data.id;
+            alert(`Booking successful! Booking ID: ${bookingId}`);
+        } catch (error) {
+            console.error('Booking failed:', error);
+            alert('Booking failed. Please try again.');
+        }
+    }
+
     return (
         <div className='flex flex-col gap-2 md:w-max h-fit p-4 mt-8 shadow-xl rounded-2xl shadow-slate-300'>
             <h3 className='font-semibold text-[22px]'>
@@ -122,9 +137,9 @@ export default function BookingWidget() {
             </div>
             {total > 0 ? (
                 // <Link to={'/places/book'}>
-                    <button className="primary !rounded-xl !bg-[#d81a40] mt-2 ">
-                        Reserve
-                    </button>
+                <button onClick={bookThisPlace} className="primary !rounded-xl !bg-[#d81a40] mt-2 ">
+                    Reserve
+                </button>
                 // </Link>
             ) : (
                 <button className="primary !rounded-xl !bg-[#d81a40] mt-2" onClick={handleCheckAvailabilityClick} >
