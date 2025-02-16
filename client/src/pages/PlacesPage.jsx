@@ -17,6 +17,15 @@ const PlacesPage = () => {
         return new Date(date).toLocaleDateString('en-GB', options); // 'en-GB' for dd/mm/yyyy format
     };
 
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`/places/${id}`);
+            setPlaces(places.filter(place => place._id !== id));
+        } catch (error) {
+            console.error('Failed to delete the place:', error);
+        }
+    };
+
     return (
         <div>
             <AccountNavigation />
@@ -37,10 +46,12 @@ const PlacesPage = () => {
                                     {place.photos.length > 0 ? place.photos.map((photo, index) => (
                                         <img key={index} src={`http://localhost:3000/uploads/${photo}`} alt={place.title} className="object-cover w-full rounded-2xl" />
                                     )) : <p className="col-span-2 md:col-span-3">No photos</p>}
-
                                 </div>
                             </div>
-                            <Link to={'/account/places/' + place._id} className='bg-primary p-1 w-20 text-center rounded-md text-white absolute right-0'>Edit</Link>
+                            <div className='flex flex-col gap-2 absolute right-0'>
+                                <Link to={'/account/places/' + place._id} className='bg-primary p-1 w-20 text-center rounded-md text-white '>Edit</Link>
+                                <button onClick={() => handleDelete(place._id)} className='bg-primary p-1 w-20 text-center rounded-md text-white'>Delete</button>
+                            </div>
                             <div className="flex-grow flex gap-4 md:gap-20 flex-col md:flex-row ">
                                 <div className='flex flex-col gap-2 max-w-4xl '>
                                     <h2 className="text-xl">{place.title}</h2>

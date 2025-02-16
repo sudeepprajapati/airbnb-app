@@ -146,6 +146,34 @@ const PlacesForAll = async (req, res) => {
     res.json(PlaceDoc)
 }
 
+const deletePlaces = async (req, res) => {
+    const { id } = req.params;
+    const { token } = req.cookies;
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) {
+            console.error('JWT verification error:', err);
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const placeDoc = await Place.findById(id);
+        if (!placeDoc) {
+            return res.status(404).json({ message: 'Place not found' });
+        }
+
+        if (userData.id === placeDoc.owner.toString()) {
+            await Place.findByIdAndDelete(id);
+            res.json({ message: 'Place deleted' });
+        } else {
+            res.status(403).json({ message: 'Unauthorized' });
+        }
+    });
+};
 
 
-export { addPhotoByLink, uploadPhoto, addPlaces, getPlaces, getPlacesId, updatePlaces, PlacesForAll };
+
+export {
+    addPhotoByLink, uploadPhoto, addPlaces,
+    getPlaces, getPlacesId, updatePlaces,
+    PlacesForAll, deletePlaces
+};

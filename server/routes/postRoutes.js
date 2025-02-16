@@ -2,7 +2,8 @@ import { Router } from "express";
 import {
     addPhotoByLink, addPlaces, uploadPhoto,
     getPlaces, getPlacesId, updatePlaces,
-    PlacesForAll
+    PlacesForAll,
+    deletePlaces
 } from '../controllers/postController.js';
 import multer from 'multer';
 
@@ -18,5 +19,6 @@ router.get('/user-places', getPlaces);
 router.get('/places/:id', getPlacesId);
 router.put('/places/:id', updatePlaces);
 router.get('/places', PlacesForAll)
+router.delete('/places/:id', deletePlaces);
 
 export default router;

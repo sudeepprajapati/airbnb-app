@@ -1,23 +1,5 @@
 import mongoose from 'mongoose';
 
-// const placeSchema = new mongoose.Schema({
-//     owner: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: 'User'
-//     },
-//     title: String,
-//     address: String,
-//     photos: [String],
-//     description: String,
-//     perks: [String],
-//     extraInfo: String,
-//     checkIn: Date,
-//     checkOut: Date,
-//     maxGuests: Number,
-//     price: Number,
-// }, { timestamps: true });
-
-
 const placeSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
