@@ -3,8 +3,9 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
 import { Place } from '../models/place.model.js';
-import { jwtSecret } from './userController.js';
 import jwt from "jsonwebtoken"
+import { jwtSecret } from "../config.js"
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

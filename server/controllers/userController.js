@@ -1,11 +1,8 @@
 import { User } from "../models/user.model.js"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
-import dotenv from 'dotenv';
 
-dotenv.config();
-
-export const jwtSecret = process.env.JWT_SECRET
+import { jwtSecret } from "../config.js"
 
 const test = ((req, res) => {
     res.json('test ok');
