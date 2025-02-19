@@ -66,16 +66,20 @@ export default function PlacePage() {
                                 {place.maxGuests > 1 ? ('guests') : ('guest')}
                             </p>
                         </div>
-                        <hr className='my-3' />
+                        <hr className='my-4' />
+                        <p className='font-bold my-5'>Hosted by {place.owner.name}</p>
+                        <hr className='my-4' />
                         <div>
                             <h2 className="text-md font-medium">{place.description}</h2>
                         </div>
-                        <hr className='my-2' />
+                        <hr className='my-3' />
                         <div className="text-md gap-2">
                             <p className='font-bold'>What this place offers</p>
-                            {place.perks}
+                            {place.perks.map((perk, index) => (
+                                <p key={index} className='text-base capitalize flex flex-col'>{perk} &nbsp; </p>
+                            ))}
                         </div>
-                        <hr className='my-2' />
+                        <hr className='my-3' />
                         <div >
                             {place.extraInfo.length > 0 && (
                                 <div>
