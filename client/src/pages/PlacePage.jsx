@@ -3,6 +3,8 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import BookingWidget from '../Components/BookingWidget'
+import PlaceGallery from '../Components/PlaceGallery'
+import AddressLink from '../Components/AddressLink'
 
 export default function PlacePage() {
     const { id } = useParams()
@@ -24,44 +26,14 @@ export default function PlacePage() {
             <div className="flex-grow flex flex-col gap-4 ">
                 <div className='flex flex-col gap-2'>
                     <h1 className="text-2xl font-bold">{place.title}</h1>
-                    <div className="grid gap-x-2 grid-cols-[2fr_1fr_1fr] ">
-                        <div className="">
-                            {place.photos?.[0] && (
-                                <div className="">
-                                    <img src={`http://localhost:3000/uploads/${place.photos?.[0]}`}
-                                        alt={place.title}
-                                        className="object-cover aspect-square lg:aspect-auto w-full max-h-80 rounded-l-xl" />
-                                </div>
-                            )}
-                        </div>
-                        <div className='grid gap-x-2 overflow-hidden'>
-                            {place.photos?.[1] && (
-                                <img src={`http://localhost:3000/uploads/${place.photos?.[1]}`} alt={place.title} className="object-cover aspect-square lg:aspect-auto max-h-40 w-full" />
-                            )}
-                            {place.photos?.[2] && (
-                                <img src={`http://localhost:3000/uploads/${place.photos?.[2]}`} alt={place.title} className="object-cover aspect-square lg:aspect-auto max-h-40 w-full relative top-2" />
-                            )}
-                        </div>
-                        <div className='grid gap-x-2 overflow-hidden'>
-                            {place.photos?.[3] && (
-                                <img src={`http://localhost:3000/uploads/${place.photos?.[3]}`} alt={place.title} className="object-cover aspect-square lg:aspect-auto max-h-40 w-full rounded-tr-xl" />
-                            )}
-                            {place.photos?.[4] && (
-                                <img src={`http://localhost:3000/uploads/${place.photos?.[4]}`} alt={place.title} className="object-cover aspect-square lg:aspect-auto max-h-40 w-full rounded-br-2xl relative top-2" />
-                            )}
-                        </div>
-                    </div>
+                    <PlaceGallery place={place} />
                 </div>
                 <div className='md:flex md:gap-20 gap-5 ' >
                     <div className='max-w-3xl'>
                         <div className='flex flex-col gap-1'>
-                            <Link
-                                to={`https://maps.google.com/?=${place.address}`}
-                                target="_blank"
-                                className="mt-4 block font-semibold underline text-xl"
-                            >
-                                Farm stay in {place.address}
-                            </Link>
+                            <AddressLink>
+                                {place.address}
+                            </AddressLink>
                             <p className="text-md ">{place.maxGuests}+ &nbsp;
                                 {place.maxGuests > 1 ? ('guests') : ('guest')}
                             </p>
@@ -76,7 +48,9 @@ export default function PlacePage() {
                         <div className="text-md gap-2">
                             <p className='font-bold'>What this place offers</p>
                             {place.perks.map((perk, index) => (
-                                <p key={index} className='text-base capitalize flex flex-col'>{perk} &nbsp; </p>
+                                <ul >
+                                    <li key={index} className='text-base capitalize flex flex-col'>- {perk} </li>
+                                </ul>
                             ))}
                         </div>
                         <hr className='my-3' />
