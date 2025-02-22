@@ -42,13 +42,13 @@ const Footer = () => {
                     {/* Contact Information */}
                     <div>
                         <h4 className="font-bold mb-2">Contact</h4>
-                        <p>Email: <a href="mailto:support@airbnbclone.com" className="hover:underline">support@airbnbclone.com</a></p>
+                        <p>Email: <a href="mailto:support@staynest.com" className="hover:underline">support@staynest.com</a></p>
                         <p>Phone: <a href="tel:+1234567890" className="hover:underline">+1 (234) 567-890</a></p>
                     </div>
                 </div>
             </div>
             <div className="text-center mt-8">
-                <p className="text-sm">&copy; {new Date().getFullYear()} Airbnb. All rights reserved.</p>
+                <p className="text-sm">&copy; {new Date().getFullYear()} StayNest. All rights reserved.</p>
             </div>
         </footer>
     );

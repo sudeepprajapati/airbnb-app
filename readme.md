@@ -1,6 +1,6 @@
-# Airbnb Clone
+# StayNest Clone
 
-This project is a clone of the popular vacation rental platform, Airbnb. It aims to replicate the core functionalities of Airbnb, including property listings, user authentication, booking, and reviews.
+This project is a clone of the popular vacation rental platform, StayNest. It aims to replicate the core functionalities of StayNest, including property listings, user authentication, booking, and reviews.
 
 ## Features
 
@@ -21,11 +21,11 @@ This project is a clone of the popular vacation rental platform, Airbnb. It aims
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/sudeeepprajapati/airbnb-clone.git
+    git clone https://github.com/sudeeepprajapati/staynest-clone.git
     ```
 2. Navigate to the project directory:
     ```bash
-    cd airbnb-clone
+    cd staynest-clone
     ```
 3. Install dependencies for both frontend and backend:
     ```bash
