@@ -11,6 +11,9 @@ import AuthMiddleware from './middleware';
 import PlacesPage from './pages/PlacesPage';
 import HeroPage from './pages/HeroPage';
 import PlacePage from './pages/PlacePage';
+import { BookingConfirmation } from './pages/BookingConfirmation';
+import BookingsPage from './pages/BookingsPage';
+import BookingPage from './pages/BookingPage';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v1/users/';
 axios.defaults.withCredentials = true
@@ -24,6 +27,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/places/:id" element={<PlacePage />} />
+          <Route path="/places/booking-confirmation" element={<BookingConfirmation />} />
+          <Route path="/account/bookings" element={<BookingsPage />} />
+          <Route path="/account/bookings/:id" element={<BookingPage />} />
           <Route path="/account/" element={
             <AuthMiddleware>
               <ProfilePage />
