@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { differenceInCalendarDays } from 'date-fns';
 
 export default function BookingWidget() {
@@ -12,6 +12,7 @@ export default function BookingWidget() {
     const [discount, setDiscount] = useState(0);
     const [serviceFeePercentage, setServiceFeePercentage] = useState(0.15);
     const checkInRef = useRef(null);
+    const navigate = useNavigate();
 
     let numberOfNights = 0;
     if (checkIn && checkOut) {
@@ -90,7 +91,8 @@ export default function BookingWidget() {
             });
 
             const bookingId = response.data.id;
-            alert(`Booking successful! Booking ID: ${bookingId}`);
+            navigate(`/account/booking/${bookingId}`);
+
         } catch (error) {
             console.error('Booking failed:', error);
             alert('Booking failed. Please try again.');
