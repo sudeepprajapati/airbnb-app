@@ -139,12 +139,12 @@ export default function BookingWidget() {
             </div>
             {total > 0 ? (
                 // <Link to={'/places/book'}>
-                <button onClick={bookThisPlace} className="primary !rounded-xl !bg-[#d81a40] mt-2 ">
+                <button onClick={bookThisPlace} className="primary !rounded-xl bg-gradient-to-r from-[#5e2bff] to-[#2e0a85] hover:opacity-95 transition duration-300 font-semibold mt-2 ">
                     Reserve
                 </button>
                 // </Link>
             ) : (
-                <button className="primary !rounded-xl !bg-[#d81a40] mt-2" onClick={handleCheckAvailabilityClick} >
+                <button className="primary !rounded-xl bg-gradient-to-r from-[#5e2bff] to-[#2e0a85] hover:opacity-95 transition duration-300 font-semibold mt-2" onClick={handleCheckAvailabilityClick} >
                     Check availability
                 </button>
             )}
