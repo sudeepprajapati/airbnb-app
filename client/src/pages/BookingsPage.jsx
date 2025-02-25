@@ -1,6 +1,4 @@
 import AccountNavigation from '../Components/AccountNavigation'
-// import PlaceImg from '../Components/PlaceImg.jsx'
-import { differenceInCalendarDays, format } from 'date-fns';
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom';
@@ -29,9 +27,14 @@ export default function BookingsPage() {
             <div className='flex flex-col gap-4 p-1 md:p-4'>
                 {bookings.length > 0 ? bookings.map(booking => (
                     <Link to={`/account/bookings/${booking._id}`} key={booking._id} className="md:flex bg-gray-100 p-2 gap-4 rounded-2xl overflow-hidden">
-                        <div className="w-48 bg-gray-200 m-auto md:m-0">
-                            <h1 className='text-center'>Image</h1>
-                            {/* <PlaceImg src={booking.place} /> */}
+                        <div className=" bg-gray-200 md:m-0 ">
+                            {booking.place.photos?.[0] && (
+                                <img
+                                    src={`http://localhost:3000/uploads/${booking.place.photos?.[0]}`}
+                                    alt="No Image found"
+                                    className='rounded-2xl object-cover max-w-36 aspect-square '
+                                />
+                            )}
                         </div>
                         <div className='py-3 md:pr-3 '>
                             <h2 className='text-xl'>{booking.place.title}</h2>
