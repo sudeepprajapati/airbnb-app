@@ -1,6 +1,6 @@
-# StayNest Clone
+# StayNest
 
-This project is a clone of the popular vacation rental platform, StayNest. It aims to replicate the core functionalities of StayNest, including property listings, user authentication, booking, and reviews.
+This project is a clone of the popular vacation rental platform, Airbnb. It aims to replicate the core functionalities of Airbnb, including property listings, user authentication, booking, and reviews.
 
 ## Features
 
