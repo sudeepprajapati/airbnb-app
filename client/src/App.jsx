@@ -14,6 +14,7 @@ import PlacePage from './pages/PlacePage';
 import { BookingConfirmation } from './pages/BookingConfirmation';
 import BookingsPage from './pages/BookingsPage';
 import BookingPage from './pages/BookingPage';
+import SearchResults from './Components/SearchResults';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v1/users/';
 axios.defaults.withCredentials = true
@@ -30,6 +31,7 @@ function App() {
           <Route path="/places/booking-confirmation" element={<BookingConfirmation />} />
           <Route path="/account/bookings" element={<BookingsPage />} />
           <Route path="/account/bookings/:id" element={<BookingPage />} />
+          <Route path="/search" element={<SearchResults />} />
           <Route path="/account/" element={
             <AuthMiddleware>
               <ProfilePage />
