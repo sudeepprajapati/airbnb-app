@@ -32,6 +32,47 @@ const registerUser = (async (req, res) => {
     }
 })
 
+const updateUser = async (req, res) => {
+    const { token } = req.cookies;
+    const { name, username, email } = req.body;
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) return res.status(403).json({ message: 'Unauthorized' });
+
+        try {
+            const userDoc = await User.findById(userData.id);
+            if (!userDoc) return res.status(404).json({ message: 'User not found' });
+
+            userDoc.set({ name, username, email });
+            await userDoc.save();
+
+            res.json({ message: 'User updated', userDoc });
+        } catch (error) {
+            console.error("Error updating user:", error);
+            res.status(500).json({ message: "Error updating user", error });
+        }
+    });
+};
+
+const deleteUser = async (req, res) => {
+    const { token } = req.cookies;
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) return res.status(403).json({ message: 'Unauthorized' });
+
+        try {
+            const userDoc = await User.findByIdAndDelete(userData.id);
+            if (!userDoc) return res.status(404).json({ message: 'User not found' });
+
+            res.clearCookie('token').json({ message: 'User deleted' });
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            res.status(500).json({ message: "Error deleting user", error });
+        }
+    });
+};
+
+
 const loginUser = (async (req, res) => {
     try {
         const { loginvalue, password } = req.body;
@@ -98,9 +139,13 @@ const userProfile = (async (req, res) => {
     }
 })
 
+
+
 export {
     test,
     registerUser,
+    updateUser,
+    deleteUser,
     loginUser,
     logoutUser,
     userProfile
