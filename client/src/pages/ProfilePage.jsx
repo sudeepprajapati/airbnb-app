@@ -1,22 +1,16 @@
 import { useContext } from "react"
 import { UserContext } from "../context/UserContext"
-import { Link, Navigate, redirect, useNavigate, useParams } from 'react-router-dom';
-import axios from "axios";
+import { Navigate, redirect, useNavigate, useParams } from 'react-router-dom';
 import PlacesPage from "./PlacesPage";
 import AccountNavigation from "../Components/AccountNavigation";
+import UserDetails from "./UserDetails";
 
 export default function ProfilePage() {
-    const { ready, user, setUser } = useContext(UserContext);
+    const { ready, user } = useContext(UserContext);
 
     let { subpage } = useParams()
     if (subpage === undefined) {
         subpage = 'profile';
-    }
-    const navigate = useNavigate();
-    async function logout() {
-        await axios.post('/logout')
-        navigate('/'); // Redirect to home page on successful login
-        setUser(null);
     }
 
     if (!ready) {
@@ -27,16 +21,12 @@ export default function ProfilePage() {
         return <Navigate to="/login" />
     }
 
-
     return (
         <div>
             <AccountNavigation />
 
             {subpage === 'profile' && (
-                <div className="text-center max-w-lg mx-auto">
-                    Logged in as {user.name} ({user.email}) <br />
-                    <button onClick={logout} className="primary max-w-md mt-2">Logout</button>
-                </div>
+                <UserDetails user={user} />
             )}
 
             {
