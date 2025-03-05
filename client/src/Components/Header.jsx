@@ -82,6 +82,7 @@ function Header({ onSearch }) {
                     {menuOpen && user && (
                         <div className="absolute right-0 mt-2 bg-white border border-gray-200 w-44 rounded-lg shadow-lg">
                             <Link to="/account" className="block px-4 py-2 hover:bg-gray-50">Account</Link>
+                            <Link to="/hosting" className="block px-4 py-2 hover:bg-gray-50">Manage Listing</Link>
                             <hr />
                             <button
                                 onClick={handleLogout}
