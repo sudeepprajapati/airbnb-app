@@ -38,3 +38,33 @@ export const getBookings = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch bookings', error });
     }
 };
+
+export const getHostBookings = async (req, res) => {
+    try {
+        const userData = await getUserDataFromReq(req);
+        const bookings = await Booking.find().populate({
+            path: 'place',
+            match: { owner: userData.id }
+        }).populate('user');
+        res.json(bookings.filter(booking => booking.place !== null));
+    } catch (error) {
+        console.error('Failed to fetch host bookings:', error);
+        res.status(500).json({ message: 'Failed to fetch host bookings', error });
+    }
+};
+export const updateBookingStatus = async (req, res) => {
+    const { bookingId, status } = req.body;
+
+    try {
+        const booking = await Booking.findById(bookingId);
+        if (!booking) return res.status(404).json({ message: 'Booking not found' });
+
+        booking.status = status;
+        await booking.save();
+
+        res.json({ message: 'Booking status updated', booking });
+    } catch (error) {
+        console.error('Failed to update booking status:', error);
+        res.status(500).json({ message: 'Failed to update booking status', error });
+    }
+};

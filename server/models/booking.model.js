@@ -14,7 +14,12 @@ const bookingSchema = new mongoose.Schema({
     checkIn: { type: Date, required: true },
     checkOut: { type: Date, required: true },
     numberOfGuests: Number,
-    totalPrice: { type: Number, required: true, },
+    totalPrice: { type: Number, required: true },
+    status: {
+        type: String, enum: ['pending', 'confirmed', 'cancelled'],
+        default: 'pending'
+    },
+    rejection_reason: { type: String, default: '' }
 }, { timestamps: true });
 
 export const Booking = mongoose.model('Booking', bookingSchema);

@@ -72,7 +72,6 @@ const deleteUser = async (req, res) => {
     });
 };
 
-
 const loginUser = (async (req, res) => {
     try {
         const { loginvalue, password } = req.body;
@@ -138,8 +137,6 @@ const userProfile = (async (req, res) => {
         res.json(null)
     }
 })
-
-
 
 export {
     test,
