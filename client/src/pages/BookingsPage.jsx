@@ -24,7 +24,7 @@ export default function BookingsPage() {
     return (
         <div>
             <AccountNavigation />
-            <div className='flex flex-col gap-4 p-1 md:p-4'>
+            <div className='flex flex-col gap-4 p-1 md:p-4 '>
                 {bookings.length > 0 ? bookings.map(booking => (
                     <Link to={`/account/bookings/${booking._id}`} key={booking._id} className="md:flex bg-gray-100 p-2 gap-4 rounded-2xl overflow-hidden">
                         <div className=" bg-gray-200 md:m-0 ">
@@ -37,7 +37,11 @@ export default function BookingsPage() {
                             )}
                         </div>
                         <div className='py-3 md:pr-3 '>
-                            <h2 className='text-xl'>{booking.place.title}</h2>
+                            <div className='flex items-center gap-5'>
+                                <h2 className='text-xl'>{booking.place.title}</h2>
+                                
+                                <p className='text-gray-600 text-end'>Status: {booking.status}</p>
+                            </div>
                             <BookingDates booking={booking} className="text-gray-500 border-t border-gray-100 py-1" />
                             <div className='flex flex-col gap-1 border-t border-gray-100 py-2'>
                                 <div className='flex gap-1'>
@@ -56,7 +60,12 @@ export default function BookingsPage() {
                             </div>
                         </div>
                     </Link>
-                )) : <div>No bookings</div>}
+                )) :
+                    <div>
+                        <p>You don't have any bookings yet.</p>
+                        <p>When you book a place, you'll find it here.</p>
+                    </div>
+                }
             </div>
         </div>
     )
