@@ -29,14 +29,6 @@ const PlacesPage = () => {
     return (
         <div>
             <AccountNavigation />
-            <div className="text-center">
-                <Link className="inline-flex gap-1 bg-primary text-white py-2 px-6 rounded-full" to={'/account/places/new'}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    Add New Place
-                </Link>
-            </div>
             <div className="mt-4">
                 {places.length > 0 ? places.map(place => (
                     <div key={place._id} className="block bg-gray-100 p-4 rounded-2xl overflow-hidden mb-4 shadow-lg shadow-gray-300">
@@ -50,7 +42,7 @@ const PlacesPage = () => {
                             </div>
                             <div className='flex flex-col gap-2 absolute right-0'>
                                 <Link to={'/account/places/' + place._id} className='bg-primary p-1 w-20 text-center rounded-md text-white '>Edit</Link>
-                                <button onClick={() => handleDelete(place._id)} className='bg-primary p-1 w-20 text-center rounded-md text-white'>Delete</button>
+                                <button onClick={() => handleDelete(place._id)} className='bg-red-500 p-1 w-20 text-center rounded-md text-white'>Delete</button>
                             </div>
                             <div className="flex-grow flex gap-4 md:gap-20 flex-col md:flex-row ">
                                 <div className='flex flex-col gap-2 max-w-4xl '>
