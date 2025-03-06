@@ -61,6 +61,17 @@ const deleteUser = async (req, res) => {
         if (err) return res.status(403).json({ message: 'Unauthorized' });
 
         try {
+            // Delete user's bookings
+            await Booking.deleteMany({ user: userData.id });
+
+            // Delete user's places
+            const places = await Place.find({ owner: userData.id });
+            for (const place of places) {
+                await Booking.deleteMany({ place: place._id });
+                await place.deleteOne();
+            }
+
+            // Delete user
             const userDoc = await User.findByIdAndDelete(userData.id);
             if (!userDoc) return res.status(404).json({ message: 'User not found' });
 
@@ -130,8 +141,8 @@ const userProfile = (async (req, res) => {
     if (token) {
         jwt.verify(token, jwtSecret, {}, async (err, userData) => {
             if (err) throw err;
-            const { name, email, _id } = await User.findById(userData.id)
-            res.json({ name, email, _id });
+            const { name, username, email, _id } = await User.findById(userData.id)
+            res.json({ name, username, email, _id });
         })
     } else {
         res.json(null)
