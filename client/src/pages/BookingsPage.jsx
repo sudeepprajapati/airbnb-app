@@ -61,7 +61,7 @@ export default function BookingsPage() {
                         </div>
                     </Link>
                 )) :
-                    <div>
+                    <div className='text-center my-14'>
                         <p>You don't have any bookings yet.</p>
                         <p>When you book a place, you'll find it here.</p>
                     </div>
