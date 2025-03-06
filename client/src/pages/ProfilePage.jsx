@@ -39,14 +39,6 @@ export default function ProfilePage() {
                     </div>
                 )
             }
-
-            {
-                subpage === 'bookings' && (
-                    <div className="text-center max-w-lg mx-auto">
-                        Bookings
-                    </div>
-                )
-            }
         </div>
     )
 }
