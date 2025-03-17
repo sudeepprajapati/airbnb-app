@@ -3,9 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
 import { Place } from '../models/place.model.js';
-import jwt from "jsonwebtoken"
-import { jwtSecret } from "../config.js"
-
+import getUserDataFromReq from '../getUserDataFromReq.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -88,33 +86,34 @@ const uploadPhoto = async (req, res) => {
 
     res.json(uploadedFiles); // Respond with the list of uploaded files
 };
-
 const addPlaces = async (req, res) => {
-    const { token } = req.cookies;
-    const {
-        title, address, addedPhotos, description,
-        perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
+    try {
+        const userData = await getUserDataFromReq(req);
+        const {
+            title, address, addedPhotos, description,
+            perks, extraInfo, checkIn, checkOut, maxGuests, price
+        } = req.body;
 
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-        if (err) throw err;
         const placeDoc = await Place.create({
             owner: userData.id,
             title, address, photos: addedPhotos, description,
             perks, extraInfo, checkIn, checkOut, maxGuests, price
-        })
+        });
         res.json({ message: 'Place added', placeDoc });
-    })
-}
+    } catch (err) {
+        res.status(401).json({ message: 'Unauthorized' });
+    }
+};
 
 const getPlaces = async (req, res) => {
-    const { token } = req.cookies;
-
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-        if (err) throw err;
+    try {
+        const userData = await getUserDataFromReq(req);
         const places = await Place.find({ owner: userData.id });
         res.json(places);
-    })
-}
+    } catch (err) {
+        res.status(401).json({ message: 'Unauthorized' });
+    }
+};
 
 const getPlacesId = async (req, res) => {
     const { id } = req.params;
@@ -123,24 +122,29 @@ const getPlacesId = async (req, res) => {
 }
 
 const updatePlaces = async (req, res) => {
-    const { id } = req.params;
-    const { token } = req.cookies;
-    const { title, address, addedPhotos, description,
-        perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
+    try {
+        const userData = await getUserDataFromReq(req);
+        const { id } = req.params;
+        const {
+            title, address, addedPhotos, description,
+            perks, extraInfo, checkIn, checkOut, maxGuests, price
+        } = req.body;
 
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-        if (err) throw err;
-        const placeDoc = await Place.findById(id)
+        const placeDoc = await Place.findById(id);
         if (userData.id === placeDoc.owner.toString()) {
             placeDoc.set({
                 title, address, photos: addedPhotos, description,
                 perks, extraInfo, checkIn, checkOut, maxGuests, price
-            })
-            await placeDoc.save()
+            });
+            await placeDoc.save();
             res.json({ message: 'Place updated', placeDoc });
+        } else {
+            res.status(403).json({ message: 'Unauthorized' });
         }
-    })
-}
+    } catch (err) {
+        res.status(401).json({ message: 'Unauthorized' });
+    }
+};
 
 const PlacesForAll = async (req, res) => {
     const PlaceDoc = await Place.find()
@@ -148,14 +152,9 @@ const PlacesForAll = async (req, res) => {
 }
 
 const deletePlaces = async (req, res) => {
-    const { id } = req.params;
-    const { token } = req.cookies;
-
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-        if (err) {
-            console.error('JWT verification error:', err);
-            return res.status(401).json({ message: 'Unauthorized' });
-        }
+    try {
+        const userData = await getUserDataFromReq(req);
+        const { id } = req.params;
 
         const placeDoc = await Place.findById(id);
         if (!placeDoc) {
@@ -168,10 +167,10 @@ const deletePlaces = async (req, res) => {
         } else {
             res.status(403).json({ message: 'Unauthorized' });
         }
-    });
+    } catch (err) {
+        res.status(401).json({ message: 'Unauthorized' });
+    }
 };
-
-
 
 export {
     addPhotoByLink, uploadPhoto, addPlaces,

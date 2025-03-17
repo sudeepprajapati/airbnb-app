@@ -1,11 +1,10 @@
 import { User } from "../models/user.model.js"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
-
 import { jwtSecret } from "../config.js"
-
+import getUserDataFromReq from "../getUserDataFromReq.js"
 const test = ((req, res) => {
-    res.json('test ok');
+    res.json('Working...');
 })
 
 const registerUser = (async (req, res) => {
@@ -33,55 +32,37 @@ const registerUser = (async (req, res) => {
 })
 
 const updateUser = async (req, res) => {
-    const { token } = req.cookies;
-    const { name, username, email } = req.body;
+    try {
+        const userData = await getUserDataFromReq(req);
 
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-        if (err) return res.status(403).json({ message: 'Unauthorized' });
+        const userDoc = await User.findById(userData.id);
+        if (!userDoc) return res.status(404).json({ message: 'User  not found' });
 
-        try {
-            const userDoc = await User.findById(userData.id);
-            if (!userDoc) return res.status(404).json({ message: 'User not found' });
+        const { name, username, email } = req.body;
+        userDoc.set({ name, username, email });
+        await userDoc.save();
 
-            userDoc.set({ name, username, email });
-            await userDoc.save();
-
-            res.json({ message: 'User updated', userDoc });
-        } catch (error) {
-            console.error("Error updating user:", error);
-            res.status(500).json({ message: "Error updating user", error });
-        }
-    });
+        res.json({ message: 'User  updated', userDoc });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ message: "Error updating user", error });
+    }
 };
 
 const deleteUser = async (req, res) => {
-    const { token } = req.cookies;
+    try {
+        const userData = await getUserDataFromReq(req);
 
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-        if (err) return res.status(403).json({ message: 'Unauthorized' });
+        const userDoc = await User.findByIdAndDelete(userData.id);
+        if (!userDoc) return res.status(404).json({ message: 'User  not found' });
 
-        try {
-            // Delete user's bookings
-            await Booking.deleteMany({ user: userData.id });
-
-            // Delete user's places
-            const places = await Place.find({ owner: userData.id });
-            for (const place of places) {
-                await Booking.deleteMany({ place: place._id });
-                await place.deleteOne();
-            }
-
-            // Delete user
-            const userDoc = await User.findByIdAndDelete(userData.id);
-            if (!userDoc) return res.status(404).json({ message: 'User not found' });
-
-            res.clearCookie('token').json({ message: 'User deleted' });
-        } catch (error) {
-            console.error("Error deleting user:", error);
-            res.status(500).json({ message: "Error deleting user", error });
-        }
-    });
+        res.clearCookie('token').json({ message: 'User  deleted' });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "Error deleting user", error });
+    }
 };
+
 
 const loginUser = (async (req, res) => {
     try {
@@ -90,36 +71,30 @@ const loginUser = (async (req, res) => {
         if (!loginvalue) {
             return res.status(400).json({ message: "username or email is required" });
         }
-
         const user = await User.findOne({
             $or: [{ username: loginvalue }, { email: loginvalue }]
         });
-
         if (!user) {
             return res.status(404).json({ message: "User does not exist" });
         }
-
         // Await the password comparison
         const isPasswordValid = await bcryptjs.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: "Invalid user credentials" });
         }
-
         // Generate JWT token
         jwt.sign({
             username: user.username,
             email: user.email,
             id: user._id,
-            // name: user.name
         }, jwtSecret, {}, (err, token) => {
             if (err) {
                 return res.status(500).json({ message: 'Error generating token', error: err });
             }
-            // Set the token in a cookie and send a response
             res.cookie('token', token, {
-                httpOnly: true, // Prevents JavaScript from accessing the cookie
-                secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-                sameSite: 'Strict', // Adjust as necessary (Lax or None for cross-site)
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Strict',
             });
             return res.status(200).json({
                 message: 'Login successful',
@@ -136,18 +111,16 @@ const logoutUser = (async (req, res) => {
     res.clearCookie('token').json({ message: 'Logged out' });
 })
 
-const userProfile = (async (req, res) => {
-    const { token } = req.cookies;
-    if (token) {
-        jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-            if (err) throw err;
-            const { name, username, email, _id } = await User.findById(userData.id)
-            res.json({ name, username, email, _id });
-        })
-    } else {
-        res.json(null)
+const userProfile = async (req, res) => {
+    try {
+        const userData = await getUserDataFromReq(req);
+        const { name, username, email, _id } = await User.findById(userData.id);
+        res.json({ name, username, email, _id });
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        res.status(500).json({ message: 'Error fetching user profile', error });
     }
-})
+}
 
 export {
     test,
