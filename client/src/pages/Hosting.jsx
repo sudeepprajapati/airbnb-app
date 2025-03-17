@@ -7,7 +7,6 @@ function Hosting() {
     const [places, setPlaces] = useState([]);
     const [reservations, setReservations] = useState([]);
     const { ready, user } = useContext(UserContext);
-    const [rejectionReason, setRejectionReason] = useState('');
 
     useEffect(() => {
         // Fetch places
@@ -22,12 +21,11 @@ function Hosting() {
     }, []);
 
     const updateBookingStatus = (bookingId, status) => {
-        axios.put('/update-booking-status', { bookingId, status, rejection_reason: rejectionReason })
+        axios.put('/update-booking-status', { bookingId, status })
             .then(response => {
                 setReservations(reservations.map(reservation =>
                     reservation._id === bookingId ? { ...reservation, status } : reservation
                 ));
-                setRejectionReason(''); // Clear the rejection reason after updating
             })
             .catch(error => {
                 console.error('Failed to update booking status:', error);
@@ -58,19 +56,20 @@ function Hosting() {
             </div>
             <div className='bg-gray-100 text-center mt-5 p-10'>
                 {reservations.length > 0 ? (
-                    <div>
+                    <div className='flex gap-5'>
                         {reservations.map(reservation => (
-                            <div key={reservation._id} className='bg-white max-w-72 text-start p-5 rounded-lg shadow-md mb-4'>
+                            <div key={reservation._id} className=' bg-white max-w-72 text-start p-5 rounded-xl shadow-md mb-4'>
                                 <h3 className='text-lg font-semibold'>{reservation.place.title}</h3>
-                                <p className='text-gray-600'>Guest: {reservation.user.name}</p>
+                                {/* <p className='text-gray-600'>Guest: {reservation.user.name}</p> */}
+                                {reservation.user && (
+                                    <p className='text-gray-600'>Guest: {reservation.user.name}</p>
+                                )}
                                 <p className='text-gray-600'>Check-in: {new Date(reservation.checkIn).toLocaleDateString()}</p>
                                 <p className='text-gray-600'>Check-out: {new Date(reservation.checkOut).toLocaleDateString()}</p>
                                 <p className='text-gray-600'>Total Price: ₹{reservation.totalPrice}</p>
                                 <p className='text-gray-600'>Status: {reservation.status}</p>
-                                {reservation.status === 'cancelled' && reservation.rejection_reason && (
-                                    <p className='text-red-600'>Rejection Reason: {reservation.rejection_reason}</p>
-                                )}
-                                <div className='flex gap-2 mt-2'>
+                                <hr className='my-4'/>
+                                <div className='flex justify-between gap-2'>
                                     <button
                                         className='bg-blue-800 text-white px-4 py-2 rounded-lg'
                                         onClick={() => updateBookingStatus(reservation._id, 'confirmed')}
@@ -84,16 +83,6 @@ function Hosting() {
                                         Reject
                                     </button>
                                 </div>
-                                {reservation.status === 'pending' && (
-                                    <div className='mt-2'>
-                                        <textarea
-                                            placeholder='Rejection Reason (optional)'
-                                            value={rejectionReason}
-                                            onChange={(e) => setRejectionReason(e.target.value)}
-                                            className='w-full p-2 border border-gray-300 rounded'
-                                        />
-                                    </div>
-                                )}
                             </div>
                         ))}
                     </div>
