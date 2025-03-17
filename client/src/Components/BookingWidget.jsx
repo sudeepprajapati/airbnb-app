@@ -91,7 +91,7 @@ export default function BookingWidget() {
             });
 
             const bookingId = response.data.id;
-            navigate(`/account/booking/${bookingId}`);
+            navigate(`/account/bookings/${bookingId}`);
 
         } catch (error) {
             console.error('Booking failed:', error);
