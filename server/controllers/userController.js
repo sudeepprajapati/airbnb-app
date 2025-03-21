@@ -1,7 +1,8 @@
 import { User } from "../models/user.model.js"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
-import { jwtSecret } from "../config.js"
+
+
 import getUserDataFromReq from "../getUserDataFromReq.js"
 const test = ((req, res) => {
     res.json('Working...');
@@ -64,7 +65,43 @@ const deleteUser = async (req, res) => {
 };
 
 
-const loginUser = (async (req, res) => {
+const loginUser = async (req, res) => {
+    const { loginvalue, password } = req.body;
+
+    if (!loginvalue) {
+        return res.status(400).json({ message: "username or email is required" });
+    }
+    const user = await User.findOne({
+        $or: [{ username: loginvalue }, { email: loginvalue }]
+    });
+    if (!user) {
+        return res.status(404).json({ message: "User does not exist" });
+    }
+    // Await the password comparison
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(401).json({ message: "Invalid user credentials" });
+    }
+    // Generate JWT token
+    jwt.sign({
+        username: user.username,
+        email: user.email,
+        id: user._id,
+    }, 'your-hardcoded-secret', {}, (err, token) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error generating token', error: err });
+        }
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+        });
+        return res.status(200).json({
+            message: 'Login successful',
+            user
+        });
+    });
+
     try {
         const { loginvalue, password } = req.body;
 
@@ -105,7 +142,7 @@ const loginUser = (async (req, res) => {
         console.error("Login error:", error);
         return res.status(500).json({ message: 'User  not logged in', error });
     }
-})
+}
 
 const logoutUser = (async (req, res) => {
     res.clearCookie('token').json({ message: 'Logged out' });

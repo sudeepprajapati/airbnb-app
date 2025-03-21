@@ -1,20 +1,30 @@
-import imageDownloader from 'image-downloader';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import fs from 'fs';
+import { v2 as cloudinary } from 'cloudinary';
 import { Place } from '../models/place.model.js';
 import getUserDataFromReq from '../getUserDataFromReq.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Configure Cloudinary
+cloudinary.config({
+cloud_name: process.env.CLOUD_NAME,
+api_key: process.env.API_KEY,
+api_secret: process.env.API_SECRET
+
+});
 
 const addPhotoByLink = async (req, res) => {
-    const { link } = req.body;
+    const { link } = req.body; // Get the image link from the request body
 
-    const uploadDir = join(__dirname, '../uploads');
-    if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+    try {
+        // Upload the image link directly to Cloudinary
+        const result = await cloudinary.uploader.upload(link, {
+            upload_preset: 'your_upload_preset' // Specify your upload preset if needed
+        });
+        res.json({ url: result.secure_url }); // Return the Cloudinary URL
+
+    } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        res.status(500).json({ error: 'Failed to upload image' });
     }
+
 
     // Get the current date
     const now = new Date();
@@ -50,41 +60,28 @@ const addPhotoByLink = async (req, res) => {
 };
 
 const uploadPhoto = async (req, res) => {
-    const uploadDir = join(__dirname, '../uploads');
+    const uploadedFiles = []; // Array to hold the URLs of uploaded files from Cloudinary
 
-    // Ensure the upload directory exists
-    if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+
+
+    try {
+        for (let i = 0; i < req.files.length; i++) {
+            const { path } = req.files[i]; // Get the file path from the request
+            const result = await cloudinary.uploader.upload(path.path, {
+                upload_preset: 'your_upload_preset' // Specify your upload preset if needed
+            }); // Upload the file to Cloudinary
+
+
+            uploadedFiles.push(result.secure_url); // Store the Cloudinary URL
+        }
+
+        res.json(uploadedFiles); // Respond with the list of uploaded file URLs from Cloudinary
+
+    } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        res.status(500).json({ error: 'Failed to upload images' });
     }
 
-    const uploadedFiles = [];
-
-    // Get the highest index from existing files
-    const existingFiles = fs.readdirSync(uploadDir);
-    const existingIndexes = existingFiles
-        .map(file => {
-            const match = file.match(/IMG-\d{6}-(\d+)\.jpg/); // Match the pattern IMG-DDMMYY-index.jpg
-            return match ? parseInt(match[1], 10) : 0; // Extract the index or return 0 if not matched
-        });
-
-    const maxIndex = existingIndexes.length > 0 ? Math.max(...existingIndexes) : 0; // Get the maximum index
-
-    for (let i = 0; i < req.files.length; i++) {
-        const { path, originalname } = req.files[i];
-        const parts = originalname.split('.');
-        const ext = parts[parts.length - 1]; // Get the file extension
-
-        // Generate a new name with the next index
-        const newIndex = maxIndex + i + 1; // Increment the max index for each new file
-        const newName = `IMG-${new Date().getFullYear().toString().slice(-2)}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}-${newIndex}.${ext}`;
-        const newPath = join(uploadDir, newName); // Create the new file path
-
-        // Rename the file to the new path
-        fs.renameSync(path, newPath);
-        uploadedFiles.push(newName); // Store the new filename
-    }
-
-    res.json(uploadedFiles); // Respond with the list of uploaded files
 };
 const addPlaces = async (req, res) => {
     try {

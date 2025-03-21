@@ -1,4 +1,6 @@
-import express from "express"
+import express from "express";
+import { cloudinaryConnect } from './db/cloudinary.js'; // Import Cloudinary connection
+
 import cors from "cors"
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser"
@@ -7,7 +9,11 @@ import { dirname, join } from 'path';
 
 dotenv.config();
 
-const app = express()
+const app = express();
+
+// Connect to Cloudinary
+cloudinaryConnect();
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename);
@@ -36,4 +42,3 @@ app.use("/api/v1/users", postRouter)
 app.use("/api/v1/users", bookingRouter)
 
 export { app }
-
